@@ -4,15 +4,17 @@ import bcrypt from "bcrypt";
 
 export async function POST(req) {
   try {
-    // Gelen verileri al
     const { email, password } = await req.json();
 
     // Kullanıcıyı bul
     const user = await prisma.user.findUnique({
       where: { email },
+      select: {
+        password: true, // Şifreyi seçiyoruz
+      },
     });
 
-    if (!user) {
+    if (!user || !user.password) {
       return NextResponse.json(
         { error: "Geçersiz email veya şifre" },
         { status: 401 }
@@ -44,9 +46,9 @@ export async function POST(req) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Hata:", error);
+    console.error("Sunucu Hatası:", error.message, error.stack);
     return NextResponse.json(
-      { error: "Sunucu hatası: Giriş başarısız" },
+      { error: "Sunucu hatası: Giriş başarısız"},
       { status: 500 }
     );
   }

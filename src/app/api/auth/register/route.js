@@ -1,14 +1,11 @@
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcrypt";
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
-  }
-
-  const { firstName, lastName, email, password, isFortuneTeller } = req.body;
-
+export async function POST(req) {
   try {
+    const { firstName, lastName, email, password, isFortuneTeller } = await req.json();
+
     // Şifreyi hash'le
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -23,12 +20,20 @@ export default async function handler(req, res) {
       },
     });
 
-    res.status(201).json({ message: "Kayıt başarılı", user });
+    return NextResponse.json(
+      { message: "Kayıt başarılı", user },
+      { status: 201 }
+    );
   } catch (error) {
     if (error.code === "P2002") {
-      res.status(400).json({ error: "Bu email zaten kullanılıyor" });
-    } else {
-      res.status(500).json({ error: "Kayıt başarısız" });
+      return NextResponse.json(
+        { error: "Bu email zaten kullanılıyor" },
+        { status: 400 }
+      );
     }
+    return NextResponse.json(
+      { error: "Kayıt başarısız" },
+      { status: 500 }
+    );
   }
 }

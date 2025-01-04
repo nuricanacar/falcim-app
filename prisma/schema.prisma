@@ -14,12 +14,12 @@ datasource db {
 }
 
 model User {
-  id  BigInt @id @default(autoincrement())
-  firstName String
-  lastName  String
-  email     String @unique
-  password String
-  isFortuneTeller Boolean @default(false)
-  createdAt DateTime @default(now())
-  
+  id              Int      @id @default(autoincrement())
+  firstName       String
+  lastName        String
+  email           String   @unique
+  password        String
+  isFortuneTeller Boolean  @default(false)
+  createdAt       DateTime @default(now())
 }
+
