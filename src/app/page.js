@@ -9,6 +9,7 @@ import { Dialog } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 
+
 const stats = [
   { label: 'Bakılan Fal', value: '44 million' },
   { label: 'Falcı', value: '$119 trillion' },
@@ -155,6 +156,7 @@ export default function Example() {
     setIsLoggedIn(false); // This sets the login status to true
   };
   return (
+
     <div className="bg-white">
     <Navbar isLoggedIn={isLoggedIn} handleLogin={handleLogin}/>
       <main className="isolate">
@@ -476,5 +478,6 @@ export default function Example() {
         </p>
       </footer>
     </div>
+
   )
 }

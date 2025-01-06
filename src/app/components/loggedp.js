@@ -47,7 +47,7 @@ export default function ExampleMenu() {
               <Menu.Item>
                 {({ active }) => (
                   <a
-                    href="/pages/profil"
+                    href="/api/profil"
                     className={classNames(
                       active ? 'bg-gray-100' : '',
                       'block px-4 py-2 text-sm text-gray-700'
@@ -60,7 +60,7 @@ export default function ExampleMenu() {
               <Menu.Item>
                 {({ active }) => (
                   <a
-                    href="/pages/siparis"
+                    href="/api/siparis"
                     className={classNames(
                       active ? 'bg-gray-100' : '',
                       'block px-4 py-2 text-sm text-gray-700'
@@ -73,7 +73,7 @@ export default function ExampleMenu() {
               <Menu.Item>
                 {({ active }) => (
                   <a
-                    href="/pages/siparis"
+                    href="/api/siparis"
                     className={classNames(
                       active ? 'bg-gray-100' : '',
                       'block px-4 py-2 text-sm text-gray-700'
