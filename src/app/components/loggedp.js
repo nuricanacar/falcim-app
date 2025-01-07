@@ -1,21 +1,16 @@
-import { Fragment } from 'react'
-import { useState, useEffect } from 'react';
-import { Menu, Transition } from '@headlessui/react'
-import Notification from './notification'
-import Request from './reqadv'
-import LoginPage from './loginp'
+import { Fragment } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import Notification from './notification';
+import Request from './reqadv';
+import { useAuth } from './AuthContext'; // AuthContext'i import et
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function ExampleMenu() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // State to track login status
-  
-  useEffect(() => {
-    const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
-    setIsLoggedIn(loggedInStatus);
-  }, [])
+  const { isLoggedIn, logout } = useAuth(); // AuthContext'ten oturum durumunu ve logout fonksiyonunu al
+
   return (
     <div className="flex items-center">
       <Request />
@@ -85,12 +80,11 @@ export default function ExampleMenu() {
               </Menu.Item>
               <Menu.Item>
                 {({ active }) => (
-<a
+                  <a
                     href="#"
                     onClick={() => {
-                      localStorage.removeItem("isLoggedIn");
-                      setIsLoggedIn(false);
-                      window.location.reload();
+                      logout(); // AuthContext'ten logout fonksiyonunu çağır
+                      window.location.reload(); // Sayfayı yenile
                     }}
                     className={classNames(
                       active ? 'bg-gray-100' : '',
@@ -106,5 +100,5 @@ export default function ExampleMenu() {
         </Menu>
       </div>
     </div>
-  )
+  );
 }

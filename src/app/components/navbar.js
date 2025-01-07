@@ -10,6 +10,8 @@ import Notification from './notification'
 import Request from './reqadv'
 import LoginPage from './loginp'
 import LoggedPage from './loggedp'
+import { useAuth } from './AuthContext';
+
 
 
 
@@ -20,7 +22,8 @@ function classNames(...classes) {
 
 export default function Example() {
   const [isLoggedIn, setIsLoggedIn] = useState(false) // State to track login status
-  
+  const { isAuthenticated } = useAuth(); // Oturum durumunu al
+
   useEffect(() => {
     const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedIn(loggedInStatus);
@@ -104,11 +107,8 @@ export default function Example() {
               </div>
               
               <div className="flex items-center">
-              {isLoggedIn ? (
-        <LoggedPage/>
-      ) : (
-        <LoginPage setLoginStatus={setIsLoggedIn} />
-      )}
+              {isAuthenticated ? <LoggedPage /> : <LoginPage />}
+
                 
               </div>
             </div>

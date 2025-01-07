@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { useAuth } from '../components/AuthContext'; // AuthContext'i import et
 
-export default function LoginSignup({ setLoginStatus }) {
+export default function LoginSignup() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -14,9 +15,11 @@ export default function LoginSignup({ setLoginStatus }) {
     role: "",
   });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // Yüklenme durumu için state
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [initialClickInside, setInitialClickInside] = useState(false);
+
+  const { login } = useAuth(); // AuthContext'ten login fonksiyonunu al
 
   const handleInputChange = (e) => {
     setFormData({
@@ -45,7 +48,7 @@ export default function LoginSignup({ setLoginStatus }) {
       return;
     }
 
-    setLoading(true); // Yüklenme durumu başlat
+    setLoading(true);
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -76,13 +79,13 @@ export default function LoginSignup({ setLoginStatus }) {
           if (!loginResponse.ok) {
             setError(loginData.error || "Otomatik giriş başarısız oldu");
           } else {
-            // Oturum durumunu kaydet ve giriş yap
-            localStorage.setItem("authToken", loginData.token);
-            setLoginStatus(true);
+            // AuthContext üzerinden giriş yap
+            login(loginData.user, loginData.token); // Kullanıcı bilgisi ve token'ı gönder
             setIsOpen(false);
           }
         } else {
-          setLoginStatus(true);
+          // Doğrudan giriş yap
+          login(data.user, data.token); // Kullanıcı bilgisi ve token'ı gönder
           setIsOpen(false);
         }
 
@@ -100,7 +103,7 @@ export default function LoginSignup({ setLoginStatus }) {
       console.error("Hata:", error);
       setError("Bir hata oluştu");
     } finally {
-      setLoading(false); // Yüklenme durumu sona erdir
+      setLoading(false);
     }
   };
 
@@ -135,7 +138,7 @@ export default function LoginSignup({ setLoginStatus }) {
             className="modal-content bg-white rounded-lg shadow-xl p-8 w-full max-w-md"
             onClick={(e) => e.stopPropagation()}
           >
-            {loading ? ( // Yüklenme durumu
+            {loading ? (
               <div className="flex items-center justify-center">
                 <div className="loader border-t-4 border-indigo-600 rounded-full w-12 h-12 animate-spin"></div>
                 <p className="ml-4 text-indigo-600">Yükleniyor...</p>
