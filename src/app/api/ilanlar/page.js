@@ -40,7 +40,7 @@ const products = [
       'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
   },
   {
-    id: 1,
+    id: 3,
     name: 'Fusion',
     category: 'UI Kit',
     href: '#',
@@ -50,7 +50,7 @@ const products = [
       'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
   },
   {
-    id: 1,
+    id: 4,
     name: 'Fusion',
     category: 'UI Kit',
     href: '#',
@@ -60,7 +60,7 @@ const products = [
       'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
   },
   {
-    id: 1,
+    id: 5,
     name: 'Fusion',
     category: 'UI Kit',
     href: '#',
@@ -70,7 +70,7 @@ const products = [
       'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
   },
   {
-    id: 1,
+    id: 6,
     name: 'Fusion',
     category: 'UI Kit',
     href: '#',
