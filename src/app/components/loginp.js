@@ -163,7 +163,7 @@ export default function LoginSignup() {
                         required={!isLogin}
                         minLength={2}
                         maxLength={50}
-                        className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black bg-white"
+                        className="px-2 mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black bg-white"
                       />
                     </div>
 
@@ -183,7 +183,7 @@ export default function LoginSignup() {
                         required={!isLogin}
                         minLength={2}
                         maxLength={50}
-                        className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black bg-white"
+                        className="px-2 mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black bg-white"
                       />
                     </div>
                   </div>
@@ -202,7 +202,7 @@ export default function LoginSignup() {
                     required
                     minLength={5}
                     maxLength={150}
-                    className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black bg-white"
+                    className="px-2 mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black bg-white"
                   />
                 </div>
 
@@ -222,7 +222,7 @@ export default function LoginSignup() {
                     required
                     minLength={8}
                     maxLength={255}
-                    className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black bg-white pr-10"
+                    className="px-2 mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black bg-white pr-10"
                   />
                   <button
                     type="button"
@@ -253,7 +253,7 @@ export default function LoginSignup() {
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         required
-                        className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black bg-white pr-10"
+                        className="px-2 mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-black bg-white pr-10"
                       />
                       <button
                         type="button"

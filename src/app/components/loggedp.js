@@ -1,15 +1,17 @@
-import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import Notification from './notification';
-import Request from './reqadv';
-import { useAuth } from './AuthContext'; // AuthContext'i import et
+import { Fragment } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import Notification from "./notification";
+import Request from "./reqadv";
+import { useAuth } from "./AuthContext"; // AuthContext'i import et
+import { useRouter } from "next/navigation"; // Router ile yönlendirme için
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
 export default function ExampleMenu() {
   const { isLoggedIn, logout } = useAuth(); // AuthContext'ten oturum durumunu ve logout fonksiyonunu al
+  const router = useRouter(); // Next.js router'ını al
 
   return (
     <div className="flex items-center">
@@ -44,8 +46,8 @@ export default function ExampleMenu() {
                   <a
                     href="/api/profil"
                     className={classNames(
-                      active ? 'bg-gray-100' : '',
-                      'block px-4 py-2 text-sm text-gray-700'
+                      active ? "bg-gray-100" : "",
+                      "block px-4 py-2 text-sm text-gray-700"
                     )}
                   >
                     Profilim
@@ -57,8 +59,8 @@ export default function ExampleMenu() {
                   <a
                     href="/api/siparis"
                     className={classNames(
-                      active ? 'bg-gray-100' : '',
-                      'block px-4 py-2 text-sm text-gray-700'
+                      active ? "bg-gray-100" : "",
+                      "block px-4 py-2 text-sm text-gray-700"
                     )}
                   >
                     Siparişlerim
@@ -70,8 +72,8 @@ export default function ExampleMenu() {
                   <a
                     href="/api/siparis"
                     className={classNames(
-                      active ? 'bg-gray-100' : '',
-                      'block px-4 py-2 text-sm text-gray-700'
+                      active ? "bg-gray-100" : "",
+                      "block px-4 py-2 text-sm text-gray-700"
                     )}
                   >
                     Destek
@@ -84,11 +86,11 @@ export default function ExampleMenu() {
                     href="#"
                     onClick={() => {
                       logout(); // AuthContext'ten logout fonksiyonunu çağır
-                      window.location.reload(); // Sayfayı yenile
+                      router.push("/"); // Anasayfaya yönlendir
                     }}
                     className={classNames(
-                      active ? 'bg-gray-100' : '',
-                      'block px-4 py-2 text-sm text-gray-700'
+                      active ? "bg-gray-100" : "",
+                      "block px-4 py-2 text-sm text-gray-700"
                     )}
                   >
                     Çıkış Yap
