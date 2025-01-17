@@ -2,6 +2,8 @@ import { useState } from "react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { useAuth } from '../components/AuthContext'; // AuthContext'i import et
+import Profile from '../components/profile';
+
 
 export default function LoginSignup() {
   const [isOpen, setIsOpen] = useState(false);

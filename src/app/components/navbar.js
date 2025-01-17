@@ -1,6 +1,6 @@
+"use client"
 import { Fragment } from 'react'
-import { useState, useEffect  } from 'react';
-
+import { useState, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { PlusIcon } from '@heroicons/react/20/solid'
@@ -10,26 +10,15 @@ import Notification from './notification'
 import Request from './reqadv'
 import LoginPage from './loginp'
 import LoggedPage from './loggedp'
-import { useAuth } from './AuthContext';
-
-
-
+import { useAuth } from './AuthContext'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-
 export default function Example() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false) // State to track login status
-  const { isAuthenticated } = useAuth(); // Oturum durumunu al
-
-  useEffect(() => {
-    const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
-    setIsLoggedIn(loggedInStatus);
-  }, [])
+  const { isAuthenticated } = useAuth() // Oturum durumunu al
   const pathname = usePathname()
- 
 
   return (
     <Disclosure as="nav" className="bg-white shadow">
@@ -58,65 +47,58 @@ export default function Example() {
                   />
                 </div>
 
-                
-
-
                 <div className="hidden md:ml-6 md:flex md:space-x-8">
-                  {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
                   <Link
-                   href="/"
-                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
-                    pathname === "/"
-                      ? "border-b-2 border-indigo-500 text-gray-900"
-                      : "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                  }`}
-                >
-                  Ana Sayfa
+                    href="/"
+                    className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
+                      pathname === "/"
+                        ? "border-b-2 border-indigo-500 text-gray-900"
+                        : "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    }`}
+                  >
+                    Ana Sayfa
                   </Link>
                   <Link
-                   href="/api/falcilar"
-                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
-                    pathname === "/api/falcilar"
-                      ? "border-b-2 border-indigo-500 text-gray-900"
-                      : "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                  }`}
-                >
-                  Falcılar
+                    href="/api/falcilar"
+                    className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
+                      pathname === "/api/falcilar"
+                        ? "border-b-2 border-indigo-500 text-gray-900"
+                        : "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    }`}
+                  >
+                    Falcılar
                   </Link>
                   <Link
-                   href="/api/ilanlar"
-                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
-                    pathname === "/api/ilanlar"
-                      ? "border-b-2 border-indigo-500 text-gray-900"
-                      : "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                  }`}
-                >
-                  İlanlar
+                    href="/api/ilanlar"
+                    className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
+                      pathname === "/api/ilanlar"
+                        ? "border-b-2 border-indigo-500 text-gray-900"
+                        : "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    }`}
+                  >
+                    İlanlar
                   </Link>
                   <Link
-                   href="/api/kesfet"
-                   className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
-                    pathname === "/api/kesfet"
-                      ? "border-b-2 border-indigo-500 text-gray-900"
-                      : "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                  }`}
-                >
-                  Keşfet
+                    href="/api/kesfet"
+                    className={`inline-flex items-center px-1 pt-1 text-sm font-medium ${
+                      pathname === "/api/kesfet"
+                        ? "border-b-2 border-indigo-500 text-gray-900"
+                        : "border-b-2 border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    }`}
+                  >
+                    Keşfet
                   </Link>
                 </div>
               </div>
-              
-              <div className="flex items-center">
-              {isAuthenticated ? <LoggedPage /> : <LoginPage />}
 
-                
+              <div className="flex items-center">
+                {isAuthenticated ? <LoggedPage /> : <LoginPage />}
               </div>
             </div>
           </div>
 
           <Disclosure.Panel className="md:hidden">
             <div className="space-y-1 pb-3 pt-2">
-              {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
               <Disclosure.Button
                 as="a"
                 href="#"
@@ -196,6 +178,5 @@ export default function Example() {
         </>
       )}
     </Disclosure>
-    
   )
 }

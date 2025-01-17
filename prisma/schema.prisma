@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,12 +11,47 @@ datasource db {
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   firstName       String
   lastName        String
-  email           String   @unique
+  email           String      @unique
   password        String
-  isFortuneTeller Boolean  @default(false)
-  createdAt       DateTime @default(now())
+  isFortuneTeller Boolean     @default(false)
+  createdAt       DateTime    @default(now())
+  userDetail      UserDetail? // One-to-one ilişki (bir kullanıcının bir detayı olabilir)
+  listings        FortuneListing[] // One-to-many ilişki (bir kullanıcının birden fazla ilanı olabilir)
 }
 
+model UserDetail {
+  id              Int      @id @default(autoincrement())
+  user_id         Int      @unique
+  user            User     @relation(fields: [user_id], references: [id])
+  birth_timestamp DateTime? // Doğum tarihi ve saati
+  photo           String?  @db.VarChar(220) // Fotoğraf linki
+  birth_place     String?  @db.VarChar(100) // Doğum yeri
+  gender          String?  @db.VarChar(6)   // Cinsiyet
+}
+
+model FortuneListing {
+  id          BigInt      @id @default(autoincrement())
+  user_id     Int
+  user        User        @relation(fields: [user_id], references: [id])
+  fortuneType String      @db.VarChar(50)
+  question    String      @db.Text
+  status      String      @default("Beklemede") @db.VarChar(20)
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @default(now()) @map("updated_at")
+  photos      ListingPhoto[] // One-to-many ilişki (bir ilanın birden fazla fotoğrafı olabilir)
+
+  @@map("fortune_listings") // Tablo adını belirtme
+}
+
+model ListingPhoto {
+  id          BigInt      @id @default(autoincrement())
+  listing_id  BigInt
+  listing     FortuneListing @relation(fields: [listing_id], references: [id])
+  photoUrl    String      @db.VarChar(255) @map("photo_url")
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@map("listing_photos") // Tablo adını belirtme
+}
