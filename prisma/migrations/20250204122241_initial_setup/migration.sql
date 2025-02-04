@@ -25,7 +25,7 @@ CREATE TABLE "UserDetail" (
 
 -- CreateTable
 CREATE TABLE "fortune_listings" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "user_id" INTEGER NOT NULL,
     "fortuneType" VARCHAR(50) NOT NULL,
     "question" TEXT NOT NULL,
@@ -38,8 +38,8 @@ CREATE TABLE "fortune_listings" (
 
 -- CreateTable
 CREATE TABLE "listing_photos" (
-    "id" BIGSERIAL NOT NULL,
-    "listing_id" BIGINT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "listing_id" INTEGER NOT NULL,
     "photo_url" VARCHAR(255) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

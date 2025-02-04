@@ -153,6 +153,7 @@ export default function Example() {
     <div className="bg-white">
     <Navbar />
       <main className="isolate">
+        
         {/* Hero section */}
         <div className="relative isolate -z-10">
           <svg

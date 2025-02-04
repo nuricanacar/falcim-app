@@ -74,7 +74,7 @@ export default function Example() {
   
       console.log("Sunucu yanıtı:", { status: response.status, data }); // Yanıtı logla
   
-      if (!response.ok || !data.success) {
+      if (!response.ok) {
         const errorMessage = data.error || "İlan oluşturulurken bir hata oluştu.";
         console.error("Sunucu hatası:", errorMessage); // Hata mesajını logla
         throw new Error(errorMessage);

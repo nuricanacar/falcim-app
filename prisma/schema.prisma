@@ -33,7 +33,7 @@ model UserDetail {
 }
 
 model FortuneListing {
-  id          BigInt      @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   user_id     Int
   user        User        @relation(fields: [user_id], references: [id])
   fortuneType String      @db.VarChar(50)
@@ -47,8 +47,8 @@ model FortuneListing {
 }
 
 model ListingPhoto {
-  id          BigInt      @id @default(autoincrement())
-  listing_id  BigInt
+  id          Int      @id @default(autoincrement())
+  listing_id  Int
   listing     FortuneListing @relation(fields: [listing_id], references: [id])
   photoUrl    String      @db.VarChar(255) @map("photo_url")
   createdAt   DateTime    @default(now()) @map("created_at")

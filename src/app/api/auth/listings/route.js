@@ -1,14 +1,36 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import { NextResponse } from 'next/server';
 
-const prisma = new PrismaClient();
+// Prisma Client tek bir instance olarak kullanılır
+const prisma = global.prisma || new PrismaClient();
 
+if (process.env.NODE_ENV !== 'production') {
+  global.prisma = prisma;
+}
+
+// GET Method: Fetch Listings
+export async function GET() {
+  try {
+    const listings = await prisma.fortuneListing.findMany();
+
+    return NextResponse.json({ success: true, listings }, { status: 200 });
+  } catch (error) {
+    console.error('İlanları çekerken hata oluştu:', error);
+    return NextResponse.json(
+      { success: false, error: "İlanlar alınırken bir hata oluştu." },
+      { status: 500 }
+    );
+  }
+}
+
+// POST Method: Create Listing
 export async function POST(request) {
   try {
-    const { userId, fortuneType, question, photos } = await request.json();
+    const { userId, fortuneType, question } = await request.json();
 
-    console.log("Gelen istek:", { userId, fortuneType, question, photos });
+    console.log("Gelen istek:", { userId, fortuneType, question });
 
+    // Validation
     if (!userId || !fortuneType || !question) {
       return NextResponse.json(
         { success: false, error: "Eksik alanlar: userId, fortuneType veya question" },
@@ -16,7 +38,7 @@ export async function POST(request) {
       );
     }
 
-    // İlanı oluştur
+    // İlan oluştur
     const listing = await prisma.fortuneListing.create({
       data: {
         user_id: userId,
@@ -26,27 +48,12 @@ export async function POST(request) {
       },
     });
 
-    console.log("İlan başarıyla oluşturuldu:", listing); // İlanı logla
+    console.log("İlan başarıyla oluşturuldu:", listing);
 
-    // Fotoğrafları ekle (varsa)
-    if (photos && photos.length > 0) {
-      await prisma.listingPhoto.createMany({
-        data: photos.map((photoUrl) => ({
-          listing_id: listing.id,
-          photo_url: photoUrl,
-        })),
-      });
-    }
-
-    // Başarılı yanıt
-    return NextResponse.json(
-      { success: true, listing },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, listing }, { status: 201 }); // 201 Created
   } catch (error) {
     console.error('İlan oluşturma hatası:', error);
 
-    // Prisma hatalarını yakala
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.error('Prisma hatası:', error.code, error.message);
       return NextResponse.json(
@@ -55,7 +62,6 @@ export async function POST(request) {
       );
     }
 
-    // Diğer hatalar
     return NextResponse.json(
       { success: false, error: error.message || "İlan oluşturulurken bir hata oluştu." },
       { status: 500 }
