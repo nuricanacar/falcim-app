@@ -11,7 +11,11 @@ if (process.env.NODE_ENV !== 'production') {
 // GET Method: Fetch Listings
 export async function GET() {
   try {
-    const listings = await prisma.fortuneListing.findMany();
+    const listings = await prisma.fortuneListing.findMany({
+      include: {
+        user: true, // Kullanıcı bilgilerini çek
+      },
+    });
 
     return NextResponse.json({ success: true, listings }, { status: 200 });
   } catch (error) {
@@ -22,6 +26,7 @@ export async function GET() {
     );
   }
 }
+
 
 // POST Method: Create Listing
 export async function POST(request) {
