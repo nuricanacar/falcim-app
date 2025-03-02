@@ -39,6 +39,8 @@ import {
 import { BellIcon, XMarkIcon as XMarkIconOutline } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '../../components/AuthContext'; // AuthContext'i import edin
+import MyOffers from '../../components/myOffers';
+import ReceivedOffers from '@/app/components/receivedOffers';
 
 const navigation = [
   { name: 'Home', href: '#' },
@@ -139,7 +141,7 @@ export default function Example() {
             </div>
             <div className="absolute inset-x-0 bottom-0 h-px bg-gray-900/5" />
           </div>
-
+                
           <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
             <div className="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none">
               <div className="flex items-center gap-x-6">
@@ -218,8 +220,12 @@ export default function Example() {
         <div className="bg-white mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             {/* ProfilePage bileşenine kullanıcı verisini props olarak geçin */}
+            {user.isFortuneTeller ? 
+            <MyOffers userId={user.id}/> 
+            : 
+            <ReceivedOffers userId={user.id} />}
             <ProfilePage user={user} />
-
+                        
             <div className="lg:col-start-3">
               {/* Activity feed */}
               <h2 className="text-sm font-semibold leading-6 text-gray-900">Activity</h2>

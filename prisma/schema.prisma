@@ -20,6 +20,8 @@ model User {
   createdAt       DateTime    @default(now())
   userDetail      UserDetail? // One-to-one ilişki (bir kullanıcının bir detayı olabilir)
   listings        FortuneListing[] // One-to-many ilişki (bir kullanıcının birden fazla ilanı olabilir)
+
+  Offer Offer[]
 }
 
 model UserDetail {
@@ -44,6 +46,7 @@ model FortuneListing {
   photos      ListingPhoto[] // One-to-many ilişki (bir ilanın birden fazla fotoğrafı olabilir)
 
   @@map("fortune_listings") // Tablo adını belirtme
+  Offer Offer[]
 }
 
 model ListingPhoto {
@@ -54,4 +57,18 @@ model ListingPhoto {
   createdAt   DateTime    @default(now()) @map("created_at")
 
   @@map("listing_photos") // Tablo adını belirtme
+}
+
+model Offer {
+  id          Int       @id @default(autoincrement())
+  listing_id  Int
+  listing     FortuneListing @relation(fields: [listing_id], references: [id])
+  user_id     Int // Teklif veren falcı
+  user        User     @relation(fields: [user_id], references: [id])
+  price       Decimal  // Teklif fiyatı
+  message     String?  @db.Text // Teklif açıklaması
+  status      String   @default("Pending") @db.VarChar(20) // Pending - Accepted - Rejected
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("offers")
 }

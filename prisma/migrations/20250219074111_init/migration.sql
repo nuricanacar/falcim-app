@@ -46,6 +46,19 @@ CREATE TABLE "listing_photos" (
     CONSTRAINT "listing_photos_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "offers" (
+    "id" SERIAL NOT NULL,
+    "listing_id" INTEGER NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "price" DECIMAL(65,30) NOT NULL,
+    "message" TEXT,
+    "status" VARCHAR(20) NOT NULL DEFAULT 'Pending',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "offers_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -60,3 +73,9 @@ ALTER TABLE "fortune_listings" ADD CONSTRAINT "fortune_listings_user_id_fkey" FO
 
 -- AddForeignKey
 ALTER TABLE "listing_photos" ADD CONSTRAINT "listing_photos_listing_id_fkey" FOREIGN KEY ("listing_id") REFERENCES "fortune_listings"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "offers" ADD CONSTRAINT "offers_listing_id_fkey" FOREIGN KEY ("listing_id") REFERENCES "fortune_listings"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "offers" ADD CONSTRAINT "offers_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
