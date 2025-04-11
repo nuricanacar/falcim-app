@@ -34,7 +34,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/<falcim-app>:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/<falcim-app>:latest # Commit hash ve latest tag'i
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:latest # Commit hash ve latest tag'i
         cache-from: type=gha # GitHub Actions cache'ini kullan
         cache-to: type=gha,mode=max
         # Build sırasında argüman gerekirse:
