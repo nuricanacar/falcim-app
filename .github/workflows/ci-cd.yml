@@ -63,9 +63,7 @@ jobs:
                 echo "IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }}"
                 echo "DATABASE URL = ${{ secrets.DATABASE_URL }}"
                 # --- Migration Komutu ---
-                # --network parametresini buraya ekleyin!
                 docker run --rm \
-                    --network falcim-network \
                     -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
                     ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }} \
                     npx prisma migrate deploy
@@ -77,7 +75,6 @@ jobs:
                 # Yeni konteyneri başlat
                 docker run -d \
                     --name falcim-app-prod \
-                    --network falcim-network \
                     -p 80:6060 \
                     --restart unless-stopped \
                     -e NODE_ENV=production \
