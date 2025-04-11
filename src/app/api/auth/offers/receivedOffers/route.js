@@ -10,7 +10,7 @@ export async function GET(req) {
     if (!userId) {
       return Response.json({ error: "Kullanıcı ID gerekli." }, { status: 400 });
     }
-
+     
     // Kullanıcının ilanlarına gelen teklifleri çek
     const receivedOffers = await prisma.offer.findMany({
       where: {
@@ -40,22 +40,29 @@ export async function POST(req) {
     }
 
     if (status === "Accepted") {
+      // Kabul edilen teklifin detaylarını çek
+      const offer = await prisma.offer.findUnique({
+        where: { id: offerId },
+        select: { listing_id: true },
+      });
+
       // Önce teklifi kabul et
       await prisma.offer.update({
         where: { id: offerId },
         data: { status: "Accepted" },
       });
 
-      // Kabul edilen teklifin ilanındaki diğer teklifleri reddet
-      const offer = await prisma.offer.findUnique({
-        where: { id: offerId },
-        select: { listing_id: true },
+      // İlanın durumunu "Fal bakılıyor" olarak güncelle
+      await prisma.fortuneListing.update({
+        where: { id: offer.listing_id },
+        data: { status: "Fal bakılıyor" },
       });
 
+      // Aynı ilana gelen diğer teklifleri reddet
       await prisma.offer.updateMany({
         where: {
           listing_id: offer.listing_id,
-          id: { not: offerId }, // Kabul edilen teklif hariç diğerleri
+          id: { not: offerId },
         },
         data: { status: "Rejected" },
       });
