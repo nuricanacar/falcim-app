@@ -61,7 +61,7 @@ jobs:
                 # ... docker login, docker pull ...
                 echo "DATABASE_URL Length: ${#DATABASE_URL}" # DATABASE_URL'in boş olup olmadığını kontrol et
                 echo "IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }}"
-
+                echo "DATABASE URL = ${{ secrets.DATABASE_URL }}"
                 # --- Migration Komutu ---
                 # --network parametresini buraya ekleyin!
                 docker run --rm \
