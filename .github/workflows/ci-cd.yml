@@ -75,12 +75,12 @@ jobs:
           # docker exec <eski-konteyner-adi> npx prisma migrate deploy (Pek önerilmez)
 
           # Mevcut konteyneri durdur ve kaldır (varsa)
-          docker stop <konteyner-adi> || true
-          docker rm <konteyner-adi> || true
+          docker stop falcim-app || true
+          docker rm falcim-app || true
 
           # Yeni konteyneri başlat
           docker run -d \
-            --name <konteyner-adi> \
+            --name falcim-app \
             -p 80:3000 \
             --restart unless-stopped \
             -e NODE_ENV=production \
