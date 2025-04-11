@@ -89,7 +89,6 @@ jobs:
                 -e DATABASE_URL=${{ secrets.SERVER_DATABASE_URL }} \
                 -e JWT_SECRET=${{ secrets.SERVER_JWT_SECRET }} \
                 # -e NEXT_PUBLIC_ANALYTICS_ID=${{ secrets.SERVER_ANALYTICS_ID }} \ # Örnek: Next.js public değişkeni
-                # -e ANY_OTHER_VARIABLE=${{ secrets.ANY_OTHER_SECRET }} \ # İhtiyaç duyduğunuz diğerleri
                 # ----- Ortam Değişkenleri Bitiş -----
                 ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }}
 
