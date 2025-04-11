@@ -1,0 +1,34 @@
+Folder PATH listing
+Volume serial number is 00B9-6FCA
+C:.
++¦¦¦.vscode
++¦¦¦prisma
+-   L¦¦¦migrations
+-       L¦¦¦20250408153745_init
+L¦¦¦src
+    +¦¦¦app
+    -   +¦¦¦api
+    -   -   +¦¦¦auth
+    -   -   -   +¦¦¦listings
+    -   -   -   +¦¦¦login
+    -   -   -   +¦¦¦offers
+    -   -   -   -   +¦¦¦addComment
+    -   -   -   -   +¦¦¦create
+    -   -   -   -   +¦¦¦listing
+    -   -   -   -   +¦¦¦myOffers
+    -   -   -   -   +¦¦¦receivedOffers
+    -   -   -   -   +¦¦¦status
+    -   -   -   -   L¦¦¦user
+    -   -   -   +¦¦¦register
+    -   -   -   +¦¦¦upload
+    -   -   -   +¦¦¦userData
+    -   -   -   L¦¦¦userdetail
+    -   -   +¦¦¦falcilar
+    -   -   +¦¦¦ilanlar
+    -   -   +¦¦¦kesfet
+    -   -   +¦¦¦profil
+    -   -   L¦¦¦siparis
+    -   +¦¦¦components
+    -   +¦¦¦fonts
+    -   L¦¦¦images
+    L¦¦¦lib

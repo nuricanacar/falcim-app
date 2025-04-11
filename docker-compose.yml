@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine # Veya mysql vb.
+    container_name: my_project_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME:-mydb}
+      POSTGRES_USER: ${DATABASE_USER:-user}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Hosttan veritabanına erişmek isterseniz
+
+  app:
+    container_name: my_project_app
+    build:
+      context: .
+      # Development için farklı bir stage kullanabilirsiniz veya direkt volume mount ile çalışabilirsiniz.
+      # Bu örnekte, lokaldeki kodla çalışacağız.
+      dockerfile: Dockerfile # Veya development için ayrı bir Dockerfile.dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      # Kod değişikliklerinin anında yansıması için volume mount
+      - .:/app
+      # node_modules'ı hosttan mount etmemek için ayrı volume (opsiyonel ama önerilir)
+      - /app/node_modules
+      - /app/.next
+    environment:
+      # .env dosyasından veya direkt olarak değişkenleri ayarlayın
+      DATABASE_URL: postgresql://${DATABASE_USER:-user}:${DATABASE_PASSWORD:-password}@db:5432/${DATABASE_NAME:-mydb}?schema=public
+      NODE_ENV: development # Lokal için development
+      NEXT_PUBLIC_API_URL: http://localhost:6060/api # Örnek
+    # Geliştirme modunda başlatma (hot-reloading için)
+    command: npm run dev
+
+volumes:
+  postgres_data:

@@ -1,0 +1,93 @@
+name: Falcım App CI/CD
+
+on:
+  push:
+    branches: [ "main" ] # Sadece main branch'e push yapıldığında tetiklensin
+  pull_request:
+    branches: [ "main" ] # Main branch'e PR açıldığında da tetiklensin (opsiyonel, build/test için)
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    # Sadece main branch'e push yapıldığında çalışsın (PR için değil)
+    if: github.event_name == 'push'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Docker Hub, GitHub Container Registry (GHCR), AWS ECR vb. bir registry'ye login olunmalı
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    # Docker buildx kur (multi-platform build vb. için daha modern)
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # Docker imajını build et ve Registry'ye push et
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/<falcim-app>:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/<falcim-app>:latest # Commit hash ve latest tag'i
+        cache-from: type=gha # GitHub Actions cache'ini kullan
+        cache-to: type=gha,mode=max
+        # Build sırasında argüman gerekirse:
+        # build-args: |
+        #   SOME_BUILD_ARG=value
+
+  deploy:
+    needs: build_and_push # build_and_push işi bittikten sonra başla
+    runs-on: ubuntu-latest
+    # Sadece main branch'e push yapıldığında çalışsın
+    if: github.event_name == 'push'
+
+    steps:
+    - name: Deploy to Server
+      uses: appleboy/ssh-action@master # Sunucuya SSH ile bağlanmak için popüler bir action
+      with:
+        host: ${{ secrets.SERVER_HOST }} # Sunucu IP veya domain adı
+        username: ${{ secrets.SERVER_USERNAME }} # SSH kullanıcı adı
+        key: ${{ secrets.SSH_PRIVATE_KEY }} # Sunucuya erişim için SSH özel anahtarı
+        port: ${{ secrets.SERVER_PORT || 22 }} # SSH portu (varsayılan 22)
+        script: |
+          # Sunucuda çalıştırılacak komutlar
+          # Docker Hub'a giriş yap (eğer private repo ise)
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+          # Yeni imajı çek
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/<proje-adi>:${{ github.sha }}
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/<proje-adi>:latest
+
+          # (Opsiyonel ama Önemli) Veritabanı migration'larını çalıştır
+          # Migration'ları çalıştırmanın birkaç yolu vardır:
+          # 1. Yeni imajla geçici bir konteyner başlatıp çalıştırmak (önerilen):
+          docker run --rm \
+            -e DATABASE_URL=${{ secrets.SERVER_DATABASE_URL }} \
+            ${{ secrets.DOCKERHUB_USERNAME }}/<proje-adi>:${{ github.sha }} \
+            npx prisma migrate deploy
+          # 2. Çalışan konteyner varsa içinde çalıştırmak (downtime olabilir)
+          # docker exec <eski-konteyner-adi> npx prisma migrate deploy (Pek önerilmez)
+
+          # Mevcut konteyneri durdur ve kaldır (varsa)
+          docker stop <konteyner-adi> || true
+          docker rm <konteyner-adi> || true
+
+          # Yeni konteyneri başlat
+          docker run -d \
+            --name <konteyner-adi> \
+            -p 80:3000 \
+            --restart unless-stopped \
+            -e NODE_ENV=production \
+            -e DATABASE_URL=${{ secrets.SERVER_DATABASE_URL }} \
+            # Diğer gerekli environment değişkenleri
+            -e JWT_SECRET=${{ secrets.SERVER_JWT_SECRET }} \
+            ${{ secrets.DOCKERHUB_USERNAME }}/<proje-adi>:${{ github.sha }} # Commit hash ile belirli versiyonu çalıştır
+
+          # (Opsiyonel) Eski, kullanılmayan Docker imajlarını temizle
+          docker image prune -f
