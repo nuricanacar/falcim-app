@@ -61,15 +61,15 @@ jobs:
           echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
           # Yeni imajı çek
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/<proje-adi>:${{ github.sha }}
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/<proje-adi>:latest
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }}
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:latest
 
           # (Opsiyonel ama Önemli) Veritabanı migration'larını çalıştır
           # Migration'ları çalıştırmanın birkaç yolu vardır:
           # 1. Yeni imajla geçici bir konteyner başlatıp çalıştırmak (önerilen):
           docker run --rm \
             -e DATABASE_URL=${{ secrets.SERVER_DATABASE_URL }} \
-            ${{ secrets.DOCKERHUB_USERNAME }}/<proje-adi>:${{ github.sha }} \
+            ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }} \
             npx prisma migrate deploy
           # 2. Çalışan konteyner varsa içinde çalıştırmak (downtime olabilir)
           # docker exec <eski-konteyner-adi> npx prisma migrate deploy (Pek önerilmez)
@@ -87,7 +87,7 @@ jobs:
             -e DATABASE_URL=${{ secrets.SERVER_DATABASE_URL }} \
             # Diğer gerekli environment değişkenleri
             -e JWT_SECRET=${{ secrets.SERVER_JWT_SECRET }} \
-            ${{ secrets.DOCKERHUB_USERNAME }}/<proje-adi>:${{ github.sha }} # Commit hash ile belirli versiyonu çalıştır
+            ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }} # Commit hash ile belirli versiyonu çalıştır
 
           # (Opsiyonel) Eski, kullanılmayan Docker imajlarını temizle
           docker image prune -f
