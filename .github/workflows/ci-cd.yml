@@ -64,7 +64,7 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:latest
 
             docker run --rm \
-              -e DATABASE_URL=${{ secrets.SERVER_DATABASE_URL }} \
+              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
               ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }} \
               npx prisma migrate deploy
 
@@ -80,8 +80,8 @@ jobs:
             --restart unless-stopped \
             -e NODE_ENV=production \
             -e PORT=6060 \
-            -e DATABASE_URL=${{ secrets.SERVER_DATABASE_URL }} \ # Bu secret'ın güncellendiğinden emin olun!
-            -e JWT_SECRET=${{ secrets.SERVER_JWT_SECRET }} \
+            -e DATABASE_URL=${{ secrets.DATABASE_URL }} \ # Bu secret'ın güncellendiğinden emin olun!
+            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
             ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }}
 
             docker image prune -f
