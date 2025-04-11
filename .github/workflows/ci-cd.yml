@@ -51,36 +51,39 @@ jobs:
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
-          # ... host, username, key, port ...
-          script: |
-            set -e
+            host: ${{ secrets.SERVER_HOST }}
+            username: ${{ secrets.SERVER_USERNAME }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            port: ${{ secrets.SERVER_PORT }}
+            script: |
+                set -e
 
-            # ... docker login, docker pull ...
-            echo "DATABASE_URL Length: ${#DATABASE_URL}" # DATABASE_URL'in boş olup olmadığını kontrol et
-            echo "IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }}"
-            
-            # --- Migration Komutu ---
-            # --network parametresini buraya ekleyin!
-            docker run --rm \
-                --network falcim-network \
-                -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-                ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }} \
-                npx prisma migrate deploy
+                # ... docker login, docker pull ...
+                echo "DATABASE_URL Length: ${#DATABASE_URL}" # DATABASE_URL'in boş olup olmadığını kontrol et
+                echo "IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }}"
 
-            # Mevcut konteyneri durdur/kaldır
-            docker stop falcim-app-prod || true
-            docker rm falcim-app-prod || true
+                # --- Migration Komutu ---
+                # --network parametresini buraya ekleyin!
+                docker run --rm \
+                    --network falcim-network \
+                    -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+                    ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }} \
+                    npx prisma migrate deploy
 
-            # Yeni konteyneri başlat
-            docker run -d \
-                --name falcim-app-prod \
-                --network falcim-network \
-                -p 80:6060 \
-                --restart unless-stopped \
-                -e NODE_ENV=production \
-                -e PORT=6060 \
-                -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-                -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-                ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }}
+                # Mevcut konteyneri durdur/kaldır
+                docker stop falcim-app-prod || true
+                docker rm falcim-app-prod || true
 
-            docker image prune -f
+                # Yeni konteyneri başlat
+                docker run -d \
+                    --name falcim-app-prod \
+                    --network falcim-network \
+                    -p 80:6060 \
+                    --restart unless-stopped \
+                    -e NODE_ENV=production \
+                    -e PORT=6060 \
+                    -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+                    -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+                    ${{ secrets.DOCKERHUB_USERNAME }}/falcim-app:${{ github.sha }}
+
+                docker image prune -f
