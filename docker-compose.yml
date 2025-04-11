@@ -15,7 +15,7 @@ services:
       - "5432:5432" # Hosttan veritabanına erişmek isterseniz
 
   app:
-    container_name: my_project_app
+    container_name: falcim_app
     build:
       context: .
       # Development için farklı bir stage kullanabilirsiniz veya direkt volume mount ile çalışabilirsiniz.
@@ -23,7 +23,7 @@ services:
       dockerfile: Dockerfile # Veya development için ayrı bir Dockerfile.dev
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "6060:6060"
     depends_on:
       - db
     volumes:

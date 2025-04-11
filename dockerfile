@@ -50,7 +50,7 @@ COPY --from=builder /app/prisma ./prisma
 # Build edilmiş Next.js uygulamasını kopyala
 COPY --from=builder /app/.next ./.next
 # Public klasörünü kopyala
-COPY --from=builder /app/public ./public
+# COPY --from=builder /app/public ./public
 # package.json'ı kopyala (npm start için gerekli)
 COPY package.json ./
 
